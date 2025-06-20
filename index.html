@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,8 +9,6 @@
   <meta name="theme-color" content="#ff0055" />
   <style>
     body {
-      <img src="icon-512.png" class="logo logo-inicio" alt="Logo Rafunys" />
-      <img src="icon-512.png" class="logo logo-fijo" alt="Logo Rafunys Fijo" />
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background: url('background_rafunys_castle.jpg') no-repeat center center fixed;
@@ -84,3 +84,197 @@
     .player2 { color: #ffccff; }
   </style>
 </head>
+<body>
+  <img src="icon-512.png" class="logo logo-inicio" alt="Logo Rafunys" />
+  <img src="icon-512.png" class="logo logo-fijo" alt="Logo Rafunys Fijo" />
+
+  <div class="player-setup">
+    <input id="player1" placeholder="Nombre Jugador/a 1" />
+    <input id="player2" placeholder="Nombre Jugador/a 2" />
+    <button onclick="showModeSelect()">Entrar al Castillo</button>
+  </div>
+
+  <div class="mode-select" style="display:none">
+    <button onclick="selectMode('free')">🔁 Modo Libre (elige nivel)</button>
+    <button onclick="selectMode('linear')">🔥 Modo Lineal (del 1 al 4)</button>
+    <div id="speed-select" style="display:none">
+      <button onclick="startLinear(5)">⚡ Velocidad Normal (5 pruebas por nivel)</button>
+      <button onclick="startLinear(10)">🐢 Velocidad Lenta (10 pruebas por nivel)</button>
+    </div>
+  </div>
+
+  <div class="level-select" style="display:none">
+    <button onclick="startGame(1)">🧡 Nivel 1</button>
+    <button onclick="startGame(2)">❤️ Nivel 2</button>
+    <button onclick="startGame(3)">🔥 Nivel 3</button>
+    <button onclick="startGame(4)">🖤 Nivel 4</button>
+    <button onclick="editChallenges()">✏️ Editar Pruebas</button>
+  </div>
+
+  <div class="game-area" style="display:none">
+    <div class="card">
+      <div class="emoji" id="emoji">😈</div>
+      <div id="challenge" class="player1">¡Desafío caliente aquí!</div>
+      <div id="timer"></div>
+      <button onclick="nextChallenge()">Siguiente prueba</button>
+    </div>
+  </div>
+
+  <div class="editor-area" style="display:none">
+    <div class="card">
+      <label for="level">Nivel:</label>
+      <select id="edit-level">
+        <option value="1">🧡 Nivel 1</option>
+        <option value="2">❤️ Nivel 2</option>
+        <option value="3">🔥 Nivel 3</option>
+        <option value="4">🖤 Nivel 4</option>
+      </select>
+      <textarea id="new-challenge" placeholder="Escribe una nueva prueba..."></textarea>
+      <select id="timer-duration">
+        <option value="0">Sin temporizador</option>
+        <option value="60">1 minuto</option>
+        <option value="120">2 minutos</option>
+      </select>
+      <button onclick="addChallenge()">Añadir prueba</button>
+      <button onclick="saveChallenges()">Guardar y Volver</button>
+    </div>
+  </div>
+
+  <script>
+    const emojis = ['😈','🔥','💦','👅','🥵','🖤','🪢','🔗','🍑','🍆'];
+    let currentLevel = 1;
+    let currentChallenges = [];
+    let timerInterval;
+    let playerNames = [];
+    let turn = 0;
+    let mode = 'free';
+    let linearSpeed = 5;
+    let challengesCompleted = 0;
+
+    let levels = JSON.parse(localStorage.getItem('rafunys_levels') || '{}');
+    if (!levels[1]) {
+      levels = {
+        1: [{"text": "Bésale el cuello durante 2 minutos.", "time": 120}],
+        2: [{"text": "Escupe en sus genitales.", "time": 0}],
+        3: [{"text": "Ata los testículos y lame.", "time": 0}],
+        4: [{"text": "Mete la mano entera con guante.", "time": 120}]
+      };
+    }
+
+    function showModeSelect() {
+      const p1 = document.getElementById('player1').value.trim() || 'Jugador/a 1';
+      const p2 = document.getElementById('player2').value.trim() || 'Jugador/a 2';
+      playerNames = [p1, p2];
+      document.querySelector('.player-setup').style.display = 'none';
+      document.querySelector('.mode-select').style.display = 'block';
+      document.querySelector('.logo-inicio').style.display = 'none';
+      document.querySelector('.logo-fijo').style.display = 'block';
+    }
+
+    function selectMode(selected) {
+      mode = selected;
+      if (mode === 'free') {
+        document.querySelector('.mode-select').style.display = 'none';
+        document.querySelector('.level-select').style.display = 'block';
+      } else {
+        document.getElementById('speed-select').style.display = 'block';
+      }
+    }
+
+    function startLinear(speed) {
+      linearSpeed = speed;
+      currentLevel = 1;
+      challengesCompleted = 0;
+      currentChallenges = [...levels[currentLevel]];
+      document.querySelector('.mode-select').style.display = 'none';
+      document.querySelector('.game-area').style.display = 'block';
+      document.querySelector('.logo-inicio').style.display = 'none';
+      document.querySelector('.logo-fijo').style.display = 'block';
+      nextChallenge();
+    }
+
+    function startGame(level) {
+      currentLevel = level;
+      currentChallenges = [...levels[level]];
+      document.querySelector('.level-select').style.display = 'none';
+      document.querySelector('.editor-area').style.display = 'none';
+      document.querySelector('.game-area').style.display = 'block';
+      document.querySelector('.logo-inicio').style.display = 'none';
+      document.querySelector('.logo-fijo').style.display = 'block';
+      nextChallenge();
+    }
+
+    function nextChallenge() {
+      clearInterval(timerInterval);
+      document.getElementById('timer').innerText = "";
+
+      if (currentChallenges.length === 0) {
+        if (mode === 'linear' && currentLevel < 4) {
+          currentLevel++;
+          currentChallenges = [...levels[currentLevel]];
+        } else {
+          document.getElementById('challenge').innerText = "¡Nivel completo!";
+          return;
+        }
+      }
+
+      if (currentChallenges.length === 0) return;
+
+      const index = Math.floor(Math.random() * currentChallenges.length);
+      const challenge = currentChallenges.splice(index, 1)[0];
+      const challengeDiv = document.getElementById('challenge');
+      const currentPlayer = playerNames[turn % 2];
+      let challengeText = `🔥 Para ${currentPlayer.toUpperCase()}: ${challenge.text}`;
+      if (/\b(ano|trasero|culo)\b/i.test(challenge.text)) {
+        challengeText += ' 🍑';
+      }
+
+      challengeDiv.innerText = challengeText;
+      challengeDiv.className = (turn % 2 === 0) ? 'player1' : 'player2';
+      document.getElementById('emoji').innerText = emojis[Math.floor(Math.random() * emojis.length)];
+
+      if (challenge.time > 0) {
+        let seconds = challenge.time;
+        timerInterval = setInterval(() => {
+          const minutes = Math.floor(seconds / 60);
+          const secs = seconds % 60;
+          document.getElementById('timer').innerText = `⏳ ${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+          if (seconds <= 0) clearInterval(timerInterval);
+          seconds--;
+        }, 1000);
+      }
+
+      turn++;
+      if (mode === 'linear') {
+        challengesCompleted++;
+        if (challengesCompleted % linearSpeed === 0 && currentLevel < 4) {
+          currentLevel++;
+          currentChallenges = [...levels[currentLevel]];
+        }
+      }
+    }
+
+    function editChallenges() {
+      document.querySelector('.level-select').style.display = 'none';
+      document.querySelector('.game-area').style.display = 'none';
+      document.querySelector('.editor-area').style.display = 'block';
+    }
+
+    function addChallenge() {
+      const lvl = document.getElementById('edit-level').value;
+      const txt = document.getElementById('new-challenge').value.trim();
+      const time = parseInt(document.getElementById('timer-duration').value);
+      if (!txt) return;
+      levels[lvl].push({ text: txt, time });
+      document.getElementById('new-challenge').value = '';
+      localStorage.setItem('rafunys_levels', JSON.stringify(levels));
+    }
+
+    function saveChallenges() {
+      localStorage.setItem('rafunys_levels', JSON.stringify(levels));
+      document.querySelector('.editor-area').style.display = 'none';
+      document.querySelector('.level-select').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
