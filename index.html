@@ -5,9 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rafunys Hot Castle</title>
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icon-512.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
+  <meta name="theme-color" content="#ff0055" />
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: url('background_rafunys_castle.jpg') no-repeat
+      background: url('background_rafunys_castle.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffb6c1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    .logo {
+      width: 120px;
+      margin-bottom: 1rem;
+    }
+    .level-select, .game-area, .editor-area, .player-setup, .m
