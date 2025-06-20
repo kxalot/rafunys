@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,35 +7,80 @@
   <meta name="theme-color" content="#ff0055" />
   <style>
     body {
-  <img src="icon-512.png" class="logo logo-inicio" alt="Logo Rafunys" />
-<img src="icon-512.png" class="logo logo-fijo" alt="Logo Rafunys Fijo" style="display:none;" />
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: url('background_rafunys_castle.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: #ffb6c1;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 2rem;
-}
+      <img src="icon-512.png" class="logo logo-inicio" alt="Logo Rafunys" />
+      <img src="icon-512.png" class="logo logo-fijo" alt="Logo Rafunys Fijo" />
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('background_rafunys_castle.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffb6c1;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 2rem;
+    }
 
-.logo-inicio {
-  width: 100px;
-  max-width: 40vw;
-  margin-bottom: 1rem;
-}
+    .logo-inicio {
+      width: 100px;
+      max-width: 40vw;
+      margin-bottom: 1rem;
+    }
 
-.logo-fijo {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  width: 40px;
-  opacity: 0.8;
-  z-index: 999;
-}
+    .logo-fijo {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 40px;
+      opacity: 0.8;
+      z-index: 999;
+      display: none;
+    }
 
+    .level-select, .game-area, .editor-area, .player-setup, .mode-select {
+      margin-top: 1rem;
+      width: 100%;
+      max-width: 400px;
+      background: rgba(0,0,0,0.65);
+      padding: 1.5rem;
+      border-radius: 10px;
+    }
 
-    .level-select, .game-area, .editor-area, .player-setup, .m
+    button {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      background: #ff0055;
+      border: none;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ff69b4;
+    }
+
+    .emoji {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    #timer {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      color: #ffd1dc;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .player1 { color: #ff88aa; }
+    .player2 { color: #ffccff; }
+  </style>
+</head>
