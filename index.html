@@ -30,18 +30,12 @@
       width: 100%;
     }
 
-    .logo-inicio {
-      width: 100px;
-      max-width: 40vw;
-      margin-bottom: 1rem;
-    }
-
     .logo-fijo {
       position: fixed;
-      top: 10px;
-      left: 10px;
-      width: 40px;
-      opacity: 0.8;
+      top: 20px;
+      left: 20px;
+      width: 60px;
+      opacity: 0.9;
       z-index: 999;
       display: none;
     }
@@ -53,6 +47,8 @@
       background: rgba(0,0,0,0.65);
       padding: 1.5rem;
       border-radius: 10px;
+      box-shadow: 0 0 15px #ff0055;
+      backdrop-filter: blur(5px);
     }
 
     button {
@@ -66,6 +62,10 @@
       border-radius: 10px;
       cursor: pointer;
       box-shadow: 0 0 10px #ff69b4;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.03);
     }
 
     .emoji {
@@ -86,6 +86,12 @@
       border-radius: 6px;
       border: none;
       font-size: 1rem;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    input::placeholder {
+      color: #ffd1dc;
     }
 
     .player1 { color: #ff88aa; }
@@ -94,7 +100,6 @@
 </head>
 <body>
   <div class="wrapper">
-    <img src="icon-512.png" class="logo logo-inicio" alt="Logo Rafunys" />
     <img src="icon-512.png" class="logo logo-fijo" alt="Logo Rafunys Fijo" />
 
     <div class="player-setup">
@@ -177,7 +182,6 @@
       playerNames = [p1, p2];
       document.querySelector('.player-setup').style.display = 'none';
       document.querySelector('.mode-select').style.display = 'block';
-      document.querySelector('.logo-inicio').style.display = 'none';
       document.querySelector('.logo-fijo').style.display = 'block';
     }
 
@@ -198,7 +202,6 @@
       currentChallenges = [...levels[currentLevel]];
       document.querySelector('.mode-select').style.display = 'none';
       document.querySelector('.game-area').style.display = 'block';
-      document.querySelector('.logo-inicio').style.display = 'none';
       document.querySelector('.logo-fijo').style.display = 'block';
       nextChallenge();
     }
@@ -209,7 +212,6 @@
       document.querySelector('.level-select').style.display = 'none';
       document.querySelector('.editor-area').style.display = 'none';
       document.querySelector('.game-area').style.display = 'block';
-      document.querySelector('.logo-inicio').style.display = 'none';
       document.querySelector('.logo-fijo').style.display = 'block';
       nextChallenge();
     }
