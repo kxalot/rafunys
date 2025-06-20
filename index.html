@@ -1,291 +1,209 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rafunys Hot Castle</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png" />
-  <meta name="theme-color" content="#ff0055" />
+  <link rel="icon" href="favicon.ico">
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: url('background_rafunys_castle.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #ffb6c1;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      padding: 0;
-    }
-
-    .wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-      width: 100%;
-    }
-
-    .logo-fijo {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 60px;
-      opacity: 0.9;
-      z-index: 999;
-      display: none;
-    }
-
-    .level-select, .game-area, .editor-area, .player-setup, .mode-select {
-      margin-top: 1rem;
-      width: 100%;
-      max-width: 400px;
-      background: rgba(0,0,0,0.65);
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #ff0055;
-      backdrop-filter: blur(5px);
-    }
-
-    button {
-      width: 100%;
-      padding: 1rem;
-      margin-top: 1rem;
-      font-size: 1.1rem;
-      background: #ff0055;
-      border: none;
+      font-family: sans-serif;
+      background-color: red;
       color: white;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #ff69b4;
-      transition: transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      overflow: hidden;
     }
-    button:hover {
-      transform: scale(1.03);
+    header {
+      padding: 10px;
+      text-align: center;
     }
-
-    .emoji {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+    header img {
+      height: 80px;
     }
-
-    #timer {
-      font-size: 1.2rem;
-      margin-top: 1rem;
-      color: #ffd1dc;
+    .game-container {
+      padding: 20px;
+      max-width: 500px;
+      text-align: center;
     }
-
-    input, select, textarea {
-      width: 100%;
-      margin-top: 0.5rem;
-      padding: 0.5rem;
-      border-radius: 6px;
+    .level-display {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .test-box {
+      background-color: black;
+      padding: 20px;
+      border-radius: 15px;
+      font-size: 1.3em;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: pink;
       border: none;
-      font-size: 1rem;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      margin: 5px;
     }
-
-    input::placeholder {
-      color: #ffd1dc;
-    }
-
-    .player1 { color: #ff88aa; }
-    .player2 { color: #ffccff; }
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <img src="icon-512.png" class="logo logo-fijo" alt="Logo Rafunys Fijo" />
-
-    <div class="player-setup">
-      <input id="player1" placeholder="Nombre Jugador/a 1" />
-      <input id="player2" placeholder="Nombre Jugador/a 2" />
-      <button onclick="showModeSelect()">Entrar al Castillo</button>
-    </div>
-
-    <div class="mode-select" style="display:none">
-      <button onclick="selectMode('free')">🔁 Modo Libre (elige nivel)</button>
-      <button onclick="selectMode('linear')">🔥 Modo Lineal (del 1 al 4)</button>
-      <div id="speed-select" style="display:none">
-        <button onclick="startLinear(5)">⚡ Velocidad Normal (5 pruebas por nivel)</button>
-        <button onclick="startLinear(10)">🐢 Velocidad Lenta (10 pruebas por nivel)</button>
-      </div>
-    </div>
-
-    <div class="level-select" style="display:none">
-      <button onclick="startGame(1)">🧡 Nivel 1</button>
-      <button onclick="startGame(2)">❤️ Nivel 2</button>
-      <button onclick="startGame(3)">🔥 Nivel 3</button>
-      <button onclick="startGame(4)">🖤 Nivel 4</button>
-      <button onclick="editChallenges()">✏️ Editar Pruebas</button>
-    </div>
-
-    <div class="game-area" style="display:none">
-      <div class="card">
-        <div class="emoji" id="emoji">😈</div>
-        <div id="challenge" class="player1">¡Desafío caliente aquí!</div>
-        <div id="timer"></div>
-        <button onclick="nextChallenge()">Siguiente prueba</button>
-      </div>
-    </div>
-
-    <div class="editor-area" style="display:none">
-      <div class="card">
-        <label for="level">Nivel:</label>
-        <select id="edit-level">
-          <option value="1">🧡 Nivel 1</option>
-          <option value="2">❤️ Nivel 2</option>
-          <option value="3">🔥 Nivel 3</option>
-          <option value="4">🖤 Nivel 4</option>
-        </select>
-        <textarea id="new-challenge" placeholder="Escribe una nueva prueba..."></textarea>
-        <select id="timer-duration">
-          <option value="0">Sin temporizador</option>
-          <option value="60">1 minuto</option>
-          <option value="120">2 minutos</option>
-        </select>
-        <button onclick="addChallenge()">Añadir prueba</button>
-        <button onclick="saveChallenges()">Guardar y Volver</button>
-      </div>
-    </div>
+  <header>
+    <img src="logo.png" alt="Rafunys Hot Castle">
+  </header>
+  <div class="game-container">
+    <div class="level-display">Nivel <span id="level">1</span></div>
+    <div class="test-box" id="testBox">Pulsa para comenzar...</div>
+    <button onclick="nextTest()">Siguiente Prueba</button>
+    <button onclick="resetGame()">Reiniciar Castillo</button>
   </div>
 
   <script>
-    const emojis = ['😈','🔥','💦','👅','🥵','🖤','🪢','🔗','🍑','🍆'];
+    const tests = [
+      // NIVEL 1 – CALENTAMIENTO
+      ...[
+        "Bésale el cuello durante 2 minutos sin parar.",
+        "Lame muy lentamente su ombligo.",
+        "Quita una prenda con los dientes.",
+        "Realiza un baile sexy mientras te vas desnudando.",
+        "Chupa lentamente un dedo de su pie.",
+        "Acaricia sus genitales por encima de la ropa durante 1 minuto.",
+        "Simula una mamada o lamida con la ropa puesta.",
+        "Mastúrbate suavemente frente a tu pareja sin tocarte los genitales.",
+        "Sube una pierna tuya sobre su cuerpo y muévete sensualmente.",
+        "Ponle una prenda tuya interior (bragas o calzoncillo) sobre la cabeza o cuello.",
+        "Siéntate sobre su cara sin contacto real (a 1 cm).",
+        "Lame su oreja de forma muy provocativa.",
+        "Usa un hielo para pasar por su vientre y muslos.",
+        "Acaricia su trasero por encima de la ropa con ambas manos.",
+        "Hazle un masaje sensual en los muslos internos.",
+        "Frota tus pezones contra alguna parte de su cuerpo.",
+        "Cruza las piernas sobre su torso como si le fueras a atrapar.",
+        "Sácale la lengua y úsala para tentarle a distancia.",
+        "Siéntate encima en ropa interior y muévete lentamente.",
+        "Ponte un disfraz sexy y aparece como si nada."
+      ].map(t => ({ level: 1, text: `🧡 ${t}` })),
+
+      // NIVEL 2 – SEXY HARD
+      ...[
+        "Chupa un dedo del pie lentamente y mírale a los ojos.",
+        "Ponle nata/chocolate en una parte del cuerpo y límpiala con la lengua.",
+        "Bebe una bebida con alcohol de su ombligo.",
+        "Lame sus testículos sin usar las manos.",
+        "Da un mordisco suave en la parte interna del muslo.",
+        "Hazle sexo oral sin que acabe durante 2 minutos.",
+        "Introduce un dedo en su boca y dile que lo chupe.",
+        "Dale un azote con la mano en el trasero.",
+        "Usa un objeto del entorno como vibrador.",
+        "Dale un beso profundo en el ano.",
+        "Desliza cubitos de hielo por sus pezones.",
+        "Simula penetración con un objeto no sexual.",
+        "Usa el palo de crucifixión para inmovilizarle las piernas.",
+        "Hazle lamer algo dulce de tus pezones.",
+        "Métete un dedo en el ano y juega con él suavemente mientras le miras.",
+        "Lame cada uno de sus dedos de los pies.",
+        "Chupa los pezones mientras le acaricias entre las piernas.",
+        "Mastúrbale mientras le das alcohol en la boca.",
+        "Métete hielo en la boca y hazle sexo oral sin sacarlo.",
+        "Pásale un consolador por la cara lentamente sin dejarle tocarlo."
+      ].map(t => ({ level: 2, text: `❤️ ${t}` })),
+
+      // NIVEL 3 – ECHANDO HUMO
+      ...[
+        "Átale las manos con cuerda y juega con sus pezones.",
+        "Mastúrbale mientras llevas un disfraz de dominatrix.",
+        "Ponle el tentáculo vibrador entre los muslos sin meterlo.",
+        "Dale azotes con la fusta mientras se toca.",
+        "Lame todas las partes de su cuerpo sin hablar.",
+        "Ponle una mordaza y acaríciale el ano.",
+        "Haz que se quede de rodillas mientras le acaricias suavemente los genitales.",
+        "Lame su trasero sin usar las manos.",
+        "Juega con su ano con un dedo, sin llegar a penetrar.",
+        "Sujétale del gancho del techo y bésale el pecho.",
+        "Hazle chupar el tentáculo como si fuera real.",
+        "Realiza una felación mientras está con los ojos vendados.",
+        "Cógelo de las caderas y simula una cabalgada sin ropa.",
+        "Hazle un masaje con aceite caliente por todo el cuerpo.",
+        "Dale a elegir entre tentáculo o vibrador... y úsalo en él/ella.",
+        "Lame sus pies mientras se masturba.",
+        "Saca la lengua y juega con su ano sin tocar con las manos.",
+        "Atado y de pie: dale caricias suaves con un pañuelo.",
+        "Mueve tus genitales por su cara sin permitirle tocar.",
+        "Usa el palo para inmovilizarle los brazos, y empieza a lamerle el torso lentamente.",
+        "Ponte el disfraz de colegiala y actúa sumisa mientras él/ella manda.",
+        "Ata los testículos con una cuerda y juega con ellos con la lengua.",
+        "Usa la fusta con golpes suaves sobre los genitales.",
+        "Escribe palabras sexuales sobre su cuerpo con pintalabios.",
+        "Escupe en sus genitales y extiéndelo con la mano.",
+        "Esconde el vibrador dentro de tu ropa interior y haz que lo busque sin manos.",
+        "Haz una \"cata\" de su cuerpo con los ojos vendados.",
+        "Simula meter la mano entera entre las piernas con los nudillos.",
+        "Hazle tocarte con la nariz cada parte de tu cuerpo.",
+        "Usa el palo para inmovilizarle boca abajo y lame desde nuca a talón."
+      ].map(t => ({ level: 3, text: `🔥 ${t}` })),
+
+      // NIVEL 4 – KINKY SEX GOD
+      ...[
+        "Amárrale de pies y manos con el palo y usa el gancho para suspender.",
+        "Ponle la mordaza y hazle sexo oral hasta el borde del orgasmo... y para.",
+        "Ordénale masturbarse mirándote a los ojos mientras le azotas con la fusta.",
+        "Estimula el ano con el tentáculo.",
+        "Mastúrbale con el vibrador hasta que no aguante más.",
+        "Azótale hasta que diga tu nombre 3 veces.",
+        "Obligación: no puede correrse hasta que tú se lo permitas.",
+        "Crea una escena de dominación completa con tu disfraz favorito.",
+        "Chúpale lentamente todo el cuerpo sin dejarle moverse.",
+        "Siéntate sobre su cara con fuerza y dale órdenes.",
+        "Introduce el consolador y estimula con vibrador a la vez.",
+        "Mastúrbale atado con los ojos vendados.",
+        "Simula que eres otra persona y actúa diferente.",
+        "Hazle correrse con una sola mano y nada más.",
+        "Lame su ano mientras usas el vibrador sobre sus genitales.",
+        "Métete dos dedos en el ano mientras usas juguetes en tu pareja.",
+        "Hazle llorar de placer (literalmente, haz que se deshaga).",
+        "Mastúrbate sobre él/ella mientras está amarrado/a.",
+        "Usa el tentáculo como látigo y después introdúcelo.",
+        "Oblígale a correrse... y luego a seguir.",
+        "Escúpale en la cara y dile que no se limpie hasta que tú lo hagas.",
+        "Oblígale a chuparte después de correrte.",
+        "Mete la mano entera (o simúlalo de forma profunda) en su ano/vulva usando lubricante y guantes.",
+        "Llena la vulva/ano con lubricante hasta que chorree.",
+        "Ata sus testículos al palo y hazle estirar hacia ti.",
+        "Píntale el cuerpo entero con palabras como 'puta', 'sucio', 'mío'... y hazle repetirlo.",
+        "Sujétale al gancho, de espaldas, y juega con todos los juguetes sin avisar qué usarás.",
+        "Penetra su ano o vagina mientras está amordazado y completamente inmovilizado.",
+        "Mastúrbate sobre su cara mientras no puede moverse.",
+        "Hazle lamer tus pies, luego tus genitales, luego el suelo."
+      ].map(t => ({ level: 4, text: `🖤 ${t}` }))
+    ];
+
     let currentLevel = 1;
-    let currentChallenges = [];
-    let timerInterval;
-    let playerNames = [];
-    let turn = 0;
-    let mode = 'free';
-    let linearSpeed = 5;
-    let challengesCompleted = 0;
+    let usedTests = [];
 
-    let levels = JSON.parse(localStorage.getItem('rafunys_levels') || '{}');
-    if (!levels[1]) {
-      levels = {
-        1: [{"text": "Bésale el cuello durante 2 minutos.", "time": 120}],
-        2: [{"text": "Escupe en sus genitales.", "time": 0}],
-        3: [{"text": "Ata los testículos y lame.", "time": 0}],
-        4: [{"text": "Mete la mano entera con guante.", "time": 120}]
-      };
-    }
-
-    function showModeSelect() {
-      const p1 = document.getElementById('player1').value.trim() || 'Jugador/a 1';
-      const p2 = document.getElementById('player2').value.trim() || 'Jugador/a 2';
-      playerNames = [p1, p2];
-      document.querySelector('.player-setup').style.display = 'none';
-      document.querySelector('.mode-select').style.display = 'block';
-      document.querySelector('.logo-fijo').style.display = 'block';
-    }
-
-    function selectMode(selected) {
-      mode = selected;
-      if (mode === 'free') {
-        document.querySelector('.mode-select').style.display = 'none';
-        document.querySelector('.level-select').style.display = 'block';
-      } else {
-        document.getElementById('speed-select').style.display = 'block';
+    function nextTest() {
+      const available = tests.filter(t => t.level === currentLevel && !usedTests.includes(t.text));
+      if (available.length === 0) {
+        currentLevel++;
+        usedTests = [];
+        document.getElementById("level").textContent = currentLevel;
+        nextTest();
+        return;
       }
+      const random = available[Math.floor(Math.random() * available.length)];
+      usedTests.push(random.text);
+      document.getElementById("testBox").textContent = random.text;
     }
 
-    function startLinear(speed) {
-      linearSpeed = speed;
+    function resetGame() {
       currentLevel = 1;
-      challengesCompleted = 0;
-      currentChallenges = [...levels[currentLevel]];
-      document.querySelector('.mode-select').style.display = 'none';
-      document.querySelector('.game-area').style.display = 'block';
-      document.querySelector('.logo-fijo').style.display = 'block';
-      nextChallenge();
-    }
-
-    function startGame(level) {
-      currentLevel = level;
-      currentChallenges = [...levels[level]];
-      document.querySelector('.level-select').style.display = 'none';
-      document.querySelector('.editor-area').style.display = 'none';
-      document.querySelector('.game-area').style.display = 'block';
-      document.querySelector('.logo-fijo').style.display = 'block';
-      nextChallenge();
-    }
-
-    function nextChallenge() {
-      clearInterval(timerInterval);
-      document.getElementById('timer').innerText = "";
-
-      if (currentChallenges.length === 0) {
-        if (mode === 'linear' && currentLevel < 4) {
-          currentLevel++;
-          currentChallenges = [...levels[currentLevel]];
-        } else {
-          document.getElementById('challenge').innerText = "¡Nivel completo!";
-          return;
-        }
-      }
-
-      if (currentChallenges.length === 0) return;
-
-      const index = Math.floor(Math.random() * currentChallenges.length);
-      const challenge = currentChallenges.splice(index, 1)[0];
-      const challengeDiv = document.getElementById('challenge');
-      const currentPlayer = playerNames[turn % 2];
-      let challengeText = `🔥 Para ${currentPlayer.toUpperCase()}: ${challenge.text}`;
-      if (/\b(ano|trasero|culo)\b/i.test(challenge.text)) {
-        challengeText += ' 🍑';
-      }
-
-      challengeDiv.innerText = challengeText;
-      challengeDiv.className = (turn % 2 === 0) ? 'player1' : 'player2';
-      document.getElementById('emoji').innerText = emojis[Math.floor(Math.random() * emojis.length)];
-
-      if (challenge.time > 0) {
-        let seconds = challenge.time;
-        timerInterval = setInterval(() => {
-          const minutes = Math.floor(seconds / 60);
-          const secs = seconds % 60;
-          document.getElementById('timer').innerText = `⏳ ${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-          if (seconds <= 0) clearInterval(timerInterval);
-          seconds--;
-        }, 1000);
-      }
-
-      turn++;
-      if (mode === 'linear') {
-        challengesCompleted++;
-        if (challengesCompleted % linearSpeed === 0 && currentLevel < 4) {
-          currentLevel++;
-          currentChallenges = [...levels[currentLevel]];
-        }
-      }
-    }
-
-    function editChallenges() {
-      document.querySelector('.level-select').style.display = 'none';
-      document.querySelector('.game-area').style.display = 'none';
-      document.querySelector('.editor-area').style.display = 'block';
-    }
-
-    function addChallenge() {
-      const lvl = document.getElementById('edit-level').value;
-      const txt = document.getElementById('new-challenge').value.trim();
-      const time = parseInt(document.getElementById('timer-duration').value);
-      if (!txt) return;
-      levels[lvl].push({ text: txt, time });
-      document.getElementById('new-challenge').value = '';
-      localStorage.setItem('rafunys_levels', JSON.stringify(levels));
-    }
-
-    function saveChallenges() {
-      localStorage.setItem('rafunys_levels', JSON.stringify(levels));
-      document.querySelector('.editor-area').style.display = 'none';
-      document.querySelector('.level-select').style.display = 'block';
+      usedTests = [];
+      document.getElementById("level").textContent = currentLevel;
+      document.getElementById("testBox").textContent = "Pulsa para comenzar...";
     }
   </script>
 </body>
