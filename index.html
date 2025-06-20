@@ -15,8 +15,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
     }
     header {
       padding: 10px;
@@ -27,11 +26,11 @@
     }
     .game-container {
       padding: 20px;
-      max-width: 500px;
+      max-width: 600px;
       text-align: center;
     }
     .level-display {
-      font-size: 1.2em;
+      font-size: 1.4em;
       margin-bottom: 10px;
     }
     .test-box {
@@ -40,6 +39,7 @@
       border-radius: 15px;
       font-size: 1.3em;
       margin-bottom: 20px;
+      min-height: 120px;
     }
     button {
       padding: 10px 20px;
@@ -50,22 +50,97 @@
       cursor: pointer;
       margin: 5px;
     }
+    select, input {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+    }
+    #setupMenu {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #gameScreen {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <header>
     <img src="logo.png" alt="Rafunys Hot Castle">
   </header>
+
   <div class="game-container">
-    <div class="level-display">Nivel <span id="level">1</span></div>
-    <div class="test-box" id="testBox">Pulsa para comenzar...</div>
-    <button onclick="nextTest()">Siguiente Prueba</button>
-    <button onclick="resetGame()">Reiniciar Castillo</button>
+    <div id="setupMenu">
+      <h2>Elige Jugadores</h2>
+      <input type="text" id="player1" placeholder="Nombre jugador/a 1">
+      <select id="gender1">
+        <option value="@hombre">Hombre</option>
+        <option value="@mujer">Mujer</option>
+      </select>
+      <input type="text" id="player2" placeholder="Nombre jugador/a 2">
+      <select id="gender2">
+        <option value="@hombre">Hombre</option>
+        <option value="@mujer">Mujer</option>
+      </select>
+      <button onclick="startGame()">Entrar al Castillo 🔥</button>
+    </div>
+
+    <div id="gameScreen">
+      <div class="level-display">Nivel <span id="level">1</span></div>
+      <div class="test-box" id="testBox">Pulsa para comenzar...</div>
+      <button onclick="nextTest()">Siguiente Prueba</button>
+      <button onclick="resetGame()">Reiniciar Castillo</button>
+    </div>
   </div>
 
   <script>
+    let currentLevel = 1;
+    let usedTests = [];
+    let player1 = "";
+    let player2 = "";
+    let gender1 = "";
+    let gender2 = "";
+
+    function personalize(text) {
+      return text
+        .replace(/@hombre/g, gender1 === '@hombre' ? player1 : player2)
+        .replace(/@mujer/g, gender1 === '@mujer' ? player1 : player2);
+    }
+
+    function startGame() {
+      player1 = document.getElementById("player1").value || "Jugador 1";
+      gender1 = document.getElementById("gender1").value;
+      player2 = document.getElementById("player2").value || "Jugador 2";
+      gender2 = document.getElementById("gender2").value;
+      document.getElementById("setupMenu").style.display = "none";
+      document.getElementById("gameScreen").style.display = "block";
+    }
+
+    function nextTest() {
+      const available = tests.filter(t => t.level === currentLevel && !usedTests.includes(t.text));
+      if (available.length === 0) {
+        currentLevel++;
+        usedTests = [];
+        document.getElementById("level").textContent = currentLevel;
+        nextTest();
+        return;
+      }
+      const random = available[Math.floor(Math.random() * available.length)];
+      usedTests.push(random.text);
+      document.getElementById("testBox").textContent = personalize(random.text);
+    }
+
+    function resetGame() {
+      currentLevel = 1;
+      usedTests = [];
+      document.getElementById("level").textContent = currentLevel;
+      document.getElementById("testBox").textContent = "Pulsa para comenzar...";
+    }
+
     const tests = [
-      // NIVEL 1 – CALENTAMIENTO
       ...[
         "Bésale el cuello durante 2 minutos sin parar.",
         "Lame muy lentamente su ombligo.",
@@ -76,7 +151,7 @@
         "Simula una mamada o lamida con la ropa puesta.",
         "Mastúrbate suavemente frente a tu pareja sin tocarte los genitales.",
         "Sube una pierna tuya sobre su cuerpo y muévete sensualmente.",
-        "Ponle una prenda tuya interior (bragas o calzoncillo) sobre la cabeza o cuello.",
+        "Ponle una prenda tuya interior sobre la cabeza o cuello.",
         "Siéntate sobre su cara sin contacto real (a 1 cm).",
         "Lame su oreja de forma muy provocativa.",
         "Usa un hielo para pasar por su vientre y muslos.",
@@ -88,8 +163,6 @@
         "Siéntate encima en ropa interior y muévete lentamente.",
         "Ponte un disfraz sexy y aparece como si nada."
       ].map(t => ({ level: 1, text: `🧡 ${t}` })),
-
-      // NIVEL 2 – SEXY HARD
       ...[
         "Chupa un dedo del pie lentamente y mírale a los ojos.",
         "Ponle nata/chocolate en una parte del cuerpo y límpiala con la lengua.",
@@ -112,8 +185,6 @@
         "Métete hielo en la boca y hazle sexo oral sin sacarlo.",
         "Pásale un consolador por la cara lentamente sin dejarle tocarlo."
       ].map(t => ({ level: 2, text: `❤️ ${t}` })),
-
-      // NIVEL 3 – ECHANDO HUMO
       ...[
         "Átale las manos con cuerda y juega con sus pezones.",
         "Mastúrbale mientras llevas un disfraz de dominatrix.",
@@ -134,20 +205,8 @@
         "Saca la lengua y juega con su ano sin tocar con las manos.",
         "Atado y de pie: dale caricias suaves con un pañuelo.",
         "Mueve tus genitales por su cara sin permitirle tocar.",
-        "Usa el palo para inmovilizarle los brazos, y empieza a lamerle el torso lentamente.",
-        "Ponte el disfraz de colegiala y actúa sumisa mientras él/ella manda.",
-        "Ata los testículos con una cuerda y juega con ellos con la lengua.",
-        "Usa la fusta con golpes suaves sobre los genitales.",
-        "Escribe palabras sexuales sobre su cuerpo con pintalabios.",
-        "Escupe en sus genitales y extiéndelo con la mano.",
-        "Esconde el vibrador dentro de tu ropa interior y haz que lo busque sin manos.",
-        "Haz una \"cata\" de su cuerpo con los ojos vendados.",
-        "Simula meter la mano entera entre las piernas con los nudillos.",
-        "Hazle tocarte con la nariz cada parte de tu cuerpo.",
-        "Usa el palo para inmovilizarle boca abajo y lame desde nuca a talón."
+        "Usa el palo para inmovilizarle los brazos, y empieza a lamerle el torso lentamente."
       ].map(t => ({ level: 3, text: `🔥 ${t}` })),
-
-      // NIVEL 4 – KINKY SEX GOD
       ...[
         "Amárrale de pies y manos con el palo y usa el gancho para suspender.",
         "Ponle la mordaza y hazle sexo oral hasta el borde del orgasmo... y para.",
@@ -168,43 +227,9 @@
         "Hazle llorar de placer (literalmente, haz que se deshaga).",
         "Mastúrbate sobre él/ella mientras está amarrado/a.",
         "Usa el tentáculo como látigo y después introdúcelo.",
-        "Oblígale a correrse... y luego a seguir.",
-        "Escúpale en la cara y dile que no se limpie hasta que tú lo hagas.",
-        "Oblígale a chuparte después de correrte.",
-        "Mete la mano entera (o simúlalo de forma profunda) en su ano/vulva usando lubricante y guantes.",
-        "Llena la vulva/ano con lubricante hasta que chorree.",
-        "Ata sus testículos al palo y hazle estirar hacia ti.",
-        "Píntale el cuerpo entero con palabras como 'puta', 'sucio', 'mío'... y hazle repetirlo.",
-        "Sujétale al gancho, de espaldas, y juega con todos los juguetes sin avisar qué usarás.",
-        "Penetra su ano o vagina mientras está amordazado y completamente inmovilizado.",
-        "Mastúrbate sobre su cara mientras no puede moverse.",
-        "Hazle lamer tus pies, luego tus genitales, luego el suelo."
+        "Oblígale a correrse... y luego a seguir."
       ].map(t => ({ level: 4, text: `🖤 ${t}` }))
     ];
-
-    let currentLevel = 1;
-    let usedTests = [];
-
-    function nextTest() {
-      const available = tests.filter(t => t.level === currentLevel && !usedTests.includes(t.text));
-      if (available.length === 0) {
-        currentLevel++;
-        usedTests = [];
-        document.getElementById("level").textContent = currentLevel;
-        nextTest();
-        return;
-      }
-      const random = available[Math.floor(Math.random() * available.length)];
-      usedTests.push(random.text);
-      document.getElementById("testBox").textContent = random.text;
-    }
-
-    function resetGame() {
-      currentLevel = 1;
-      usedTests = [];
-      document.getElementById("level").textContent = currentLevel;
-      document.getElementById("testBox").textContent = "Pulsa para comenzar...";
-    }
   </script>
 </body>
 </html>
