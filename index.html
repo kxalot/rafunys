@@ -1,235 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rafunys Hot Castle</title>
-  <link rel="icon" href="favicon.ico">
-  <style>
-    body {
-      margin: 0;
-      font-family: sans-serif;
-      background-color: red;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-    }
-    header {
-      padding: 10px;
-      text-align: center;
-    }
-    header img {
-      height: 80px;
-    }
-    .game-container {
-      padding: 20px;
-      max-width: 600px;
-      text-align: center;
-    }
-    .level-display {
-      font-size: 1.4em;
-      margin-bottom: 10px;
-    }
-    .test-box {
-      background-color: black;
-      padding: 20px;
-      border-radius: 15px;
-      font-size: 1.3em;
-      margin-bottom: 20px;
-      min-height: 120px;
-    }
-    button {
-      padding: 10px 20px;
-      background-color: pink;
-      border: none;
-      border-radius: 10px;
-      font-size: 1em;
-      cursor: pointer;
-      margin: 5px;
-    }
-    select, input {
-      padding: 10px;
-      margin: 10px;
-      border-radius: 8px;
-      border: none;
-      font-size: 1em;
-    }
-    #setupMenu {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    #gameScreen {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" />
 </head>
 <body>
+  <div id="background-logo"></div>
   <header>
-    <img src="logo.png" alt="Rafunys Hot Castle">
+    <img src="logo.png" alt="Rafunys Hot Castle" class="main-logo"/>
   </header>
-
-  <div class="game-container">
-    <div id="setupMenu">
+  <main class="game-container">
+    <section id="setupMenu">
       <h2>Elige Jugadores</h2>
-      <input type="text" id="player1" placeholder="Nombre jugador/a 1">
+      <input type="text" id="player1" placeholder="Nombre jugador/a 1" />
       <select id="gender1">
         <option value="@hombre">Hombre</option>
         <option value="@mujer">Mujer</option>
       </select>
-      <input type="text" id="player2" placeholder="Nombre jugador/a 2">
+      <input type="text" id="player2" placeholder="Nombre jugador/a 2" />
       <select id="gender2">
         <option value="@hombre">Hombre</option>
         <option value="@mujer">Mujer</option>
       </select>
       <button onclick="startGame()">Entrar al Castillo 🔥</button>
-    </div>
+    </section>
 
-    <div id="gameScreen">
+    <section id="turnNotice" class="hidden">
+      <h2 id="turnText">Turno de...</h2>
+    </section>
+
+    <section id="gameScreen" class="hidden">
       <div class="level-display">Nivel <span id="level">1</span></div>
+      <div class="turn-display">Turno de: <span id="currentPlayerName"></span></div>
       <div class="test-box" id="testBox">Pulsa para comenzar...</div>
+      <div id="timer" class="hidden"></div>
       <button onclick="nextTest()">Siguiente Prueba</button>
       <button onclick="resetGame()">Reiniciar Castillo</button>
-    </div>
-  </div>
+    </section>
+  </main>
 
-  <script>
-    let currentLevel = 1;
-    let usedTests = [];
-    let player1 = "";
-    let player2 = "";
-    let gender1 = "";
-    let gender2 = "";
-
-    function personalize(text) {
-      return text
-        .replace(/@hombre/g, gender1 === '@hombre' ? player1 : player2)
-        .replace(/@mujer/g, gender1 === '@mujer' ? player1 : player2);
-    }
-
-    function startGame() {
-      player1 = document.getElementById("player1").value || "Jugador 1";
-      gender1 = document.getElementById("gender1").value;
-      player2 = document.getElementById("player2").value || "Jugador 2";
-      gender2 = document.getElementById("gender2").value;
-      document.getElementById("setupMenu").style.display = "none";
-      document.getElementById("gameScreen").style.display = "block";
-    }
-
-    function nextTest() {
-      const available = tests.filter(t => t.level === currentLevel && !usedTests.includes(t.text));
-      if (available.length === 0) {
-        currentLevel++;
-        usedTests = [];
-        document.getElementById("level").textContent = currentLevel;
-        nextTest();
-        return;
-      }
-      const random = available[Math.floor(Math.random() * available.length)];
-      usedTests.push(random.text);
-      document.getElementById("testBox").textContent = personalize(random.text);
-    }
-
-    function resetGame() {
-      currentLevel = 1;
-      usedTests = [];
-      document.getElementById("level").textContent = currentLevel;
-      document.getElementById("testBox").textContent = "Pulsa para comenzar...";
-    }
-
-    const tests = [
-      ...[
-        "Bésale el cuello durante 2 minutos sin parar.",
-        "Lame muy lentamente su ombligo.",
-        "Quita una prenda con los dientes.",
-        "Realiza un baile sexy mientras te vas desnudando.",
-        "Chupa lentamente un dedo de su pie.",
-        "Acaricia sus genitales por encima de la ropa durante 1 minuto.",
-        "Simula una mamada o lamida con la ropa puesta.",
-        "Mastúrbate suavemente frente a tu pareja sin tocarte los genitales.",
-        "Sube una pierna tuya sobre su cuerpo y muévete sensualmente.",
-        "Ponle una prenda tuya interior sobre la cabeza o cuello.",
-        "Siéntate sobre su cara sin contacto real (a 1 cm).",
-        "Lame su oreja de forma muy provocativa.",
-        "Usa un hielo para pasar por su vientre y muslos.",
-        "Acaricia su trasero por encima de la ropa con ambas manos.",
-        "Hazle un masaje sensual en los muslos internos.",
-        "Frota tus pezones contra alguna parte de su cuerpo.",
-        "Cruza las piernas sobre su torso como si le fueras a atrapar.",
-        "Sácale la lengua y úsala para tentarle a distancia.",
-        "Siéntate encima en ropa interior y muévete lentamente.",
-        "Ponte un disfraz sexy y aparece como si nada."
-      ].map(t => ({ level: 1, text: `🧡 ${t}` })),
-      ...[
-        "Chupa un dedo del pie lentamente y mírale a los ojos.",
-        "Ponle nata/chocolate en una parte del cuerpo y límpiala con la lengua.",
-        "Bebe una bebida con alcohol de su ombligo.",
-        "Lame sus testículos sin usar las manos.",
-        "Da un mordisco suave en la parte interna del muslo.",
-        "Hazle sexo oral sin que acabe durante 2 minutos.",
-        "Introduce un dedo en su boca y dile que lo chupe.",
-        "Dale un azote con la mano en el trasero.",
-        "Usa un objeto del entorno como vibrador.",
-        "Dale un beso profundo en el ano.",
-        "Desliza cubitos de hielo por sus pezones.",
-        "Simula penetración con un objeto no sexual.",
-        "Usa el palo de crucifixión para inmovilizarle las piernas.",
-        "Hazle lamer algo dulce de tus pezones.",
-        "Métete un dedo en el ano y juega con él suavemente mientras le miras.",
-        "Lame cada uno de sus dedos de los pies.",
-        "Chupa los pezones mientras le acaricias entre las piernas.",
-        "Mastúrbale mientras le das alcohol en la boca.",
-        "Métete hielo en la boca y hazle sexo oral sin sacarlo.",
-        "Pásale un consolador por la cara lentamente sin dejarle tocarlo."
-      ].map(t => ({ level: 2, text: `❤️ ${t}` })),
-      ...[
-        "Átale las manos con cuerda y juega con sus pezones.",
-        "Mastúrbale mientras llevas un disfraz de dominatrix.",
-        "Ponle el tentáculo vibrador entre los muslos sin meterlo.",
-        "Dale azotes con la fusta mientras se toca.",
-        "Lame todas las partes de su cuerpo sin hablar.",
-        "Ponle una mordaza y acaríciale el ano.",
-        "Haz que se quede de rodillas mientras le acaricias suavemente los genitales.",
-        "Lame su trasero sin usar las manos.",
-        "Juega con su ano con un dedo, sin llegar a penetrar.",
-        "Sujétale del gancho del techo y bésale el pecho.",
-        "Hazle chupar el tentáculo como si fuera real.",
-        "Realiza una felación mientras está con los ojos vendados.",
-        "Cógelo de las caderas y simula una cabalgada sin ropa.",
-        "Hazle un masaje con aceite caliente por todo el cuerpo.",
-        "Dale a elegir entre tentáculo o vibrador... y úsalo en él/ella.",
-        "Lame sus pies mientras se masturba.",
-        "Saca la lengua y juega con su ano sin tocar con las manos.",
-        "Atado y de pie: dale caricias suaves con un pañuelo.",
-        "Mueve tus genitales por su cara sin permitirle tocar.",
-        "Usa el palo para inmovilizarle los brazos, y empieza a lamerle el torso lentamente."
-      ].map(t => ({ level: 3, text: `🔥 ${t}` })),
-      ...[
-        "Amárrale de pies y manos con el palo y usa el gancho para suspender.",
-        "Ponle la mordaza y hazle sexo oral hasta el borde del orgasmo... y para.",
-        "Ordénale masturbarse mirándote a los ojos mientras le azotas con la fusta.",
-        "Estimula el ano con el tentáculo.",
-        "Mastúrbale con el vibrador hasta que no aguante más.",
-        "Azótale hasta que diga tu nombre 3 veces.",
-        "Obligación: no puede correrse hasta que tú se lo permitas.",
-        "Crea una escena de dominación completa con tu disfraz favorito.",
-        "Chúpale lentamente todo el cuerpo sin dejarle moverse.",
-        "Siéntate sobre su cara con fuerza y dale órdenes.",
-        "Introduce el consolador y estimula con vibrador a la vez.",
-        "Mastúrbale atado con los ojos vendados.",
-        "Simula que eres otra persona y actúa diferente.",
-        "Hazle correrse con una sola mano y nada más.",
-        "Lame su ano mientras usas el vibrador sobre sus genitales.",
-        "Métete dos dedos en el ano mientras usas juguetes en tu pareja.",
-        "Hazle llorar de placer (literalmente, haz que se deshaga).",
-        "Mastúrbate sobre él/ella mientras está amarrado/a.",
-        "Usa el tentáculo como látigo y después introdúcelo.",
-        "Oblígale a correrse... y luego a seguir."
-      ].map(t => ({ level: 4, text: `🖤 ${t}` }))
-    ];
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
