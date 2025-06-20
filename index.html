@@ -19,7 +19,15 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      padding: 0;
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: 2rem;
+      width: 100%;
     }
 
     .logo-inicio {
@@ -85,58 +93,60 @@
   </style>
 </head>
 <body>
-  <img src="icon-512.png" class="logo logo-inicio" alt="Logo Rafunys" />
-  <img src="icon-512.png" class="logo logo-fijo" alt="Logo Rafunys Fijo" />
+  <div class="wrapper">
+    <img src="icon-512.png" class="logo logo-inicio" alt="Logo Rafunys" />
+    <img src="icon-512.png" class="logo logo-fijo" alt="Logo Rafunys Fijo" />
 
-  <div class="player-setup">
-    <input id="player1" placeholder="Nombre Jugador/a 1" />
-    <input id="player2" placeholder="Nombre Jugador/a 2" />
-    <button onclick="showModeSelect()">Entrar al Castillo</button>
-  </div>
-
-  <div class="mode-select" style="display:none">
-    <button onclick="selectMode('free')">🔁 Modo Libre (elige nivel)</button>
-    <button onclick="selectMode('linear')">🔥 Modo Lineal (del 1 al 4)</button>
-    <div id="speed-select" style="display:none">
-      <button onclick="startLinear(5)">⚡ Velocidad Normal (5 pruebas por nivel)</button>
-      <button onclick="startLinear(10)">🐢 Velocidad Lenta (10 pruebas por nivel)</button>
+    <div class="player-setup">
+      <input id="player1" placeholder="Nombre Jugador/a 1" />
+      <input id="player2" placeholder="Nombre Jugador/a 2" />
+      <button onclick="showModeSelect()">Entrar al Castillo</button>
     </div>
-  </div>
 
-  <div class="level-select" style="display:none">
-    <button onclick="startGame(1)">🧡 Nivel 1</button>
-    <button onclick="startGame(2)">❤️ Nivel 2</button>
-    <button onclick="startGame(3)">🔥 Nivel 3</button>
-    <button onclick="startGame(4)">🖤 Nivel 4</button>
-    <button onclick="editChallenges()">✏️ Editar Pruebas</button>
-  </div>
-
-  <div class="game-area" style="display:none">
-    <div class="card">
-      <div class="emoji" id="emoji">😈</div>
-      <div id="challenge" class="player1">¡Desafío caliente aquí!</div>
-      <div id="timer"></div>
-      <button onclick="nextChallenge()">Siguiente prueba</button>
+    <div class="mode-select" style="display:none">
+      <button onclick="selectMode('free')">🔁 Modo Libre (elige nivel)</button>
+      <button onclick="selectMode('linear')">🔥 Modo Lineal (del 1 al 4)</button>
+      <div id="speed-select" style="display:none">
+        <button onclick="startLinear(5)">⚡ Velocidad Normal (5 pruebas por nivel)</button>
+        <button onclick="startLinear(10)">🐢 Velocidad Lenta (10 pruebas por nivel)</button>
+      </div>
     </div>
-  </div>
 
-  <div class="editor-area" style="display:none">
-    <div class="card">
-      <label for="level">Nivel:</label>
-      <select id="edit-level">
-        <option value="1">🧡 Nivel 1</option>
-        <option value="2">❤️ Nivel 2</option>
-        <option value="3">🔥 Nivel 3</option>
-        <option value="4">🖤 Nivel 4</option>
-      </select>
-      <textarea id="new-challenge" placeholder="Escribe una nueva prueba..."></textarea>
-      <select id="timer-duration">
-        <option value="0">Sin temporizador</option>
-        <option value="60">1 minuto</option>
-        <option value="120">2 minutos</option>
-      </select>
-      <button onclick="addChallenge()">Añadir prueba</button>
-      <button onclick="saveChallenges()">Guardar y Volver</button>
+    <div class="level-select" style="display:none">
+      <button onclick="startGame(1)">🧡 Nivel 1</button>
+      <button onclick="startGame(2)">❤️ Nivel 2</button>
+      <button onclick="startGame(3)">🔥 Nivel 3</button>
+      <button onclick="startGame(4)">🖤 Nivel 4</button>
+      <button onclick="editChallenges()">✏️ Editar Pruebas</button>
+    </div>
+
+    <div class="game-area" style="display:none">
+      <div class="card">
+        <div class="emoji" id="emoji">😈</div>
+        <div id="challenge" class="player1">¡Desafío caliente aquí!</div>
+        <div id="timer"></div>
+        <button onclick="nextChallenge()">Siguiente prueba</button>
+      </div>
+    </div>
+
+    <div class="editor-area" style="display:none">
+      <div class="card">
+        <label for="level">Nivel:</label>
+        <select id="edit-level">
+          <option value="1">🧡 Nivel 1</option>
+          <option value="2">❤️ Nivel 2</option>
+          <option value="3">🔥 Nivel 3</option>
+          <option value="4">🖤 Nivel 4</option>
+        </select>
+        <textarea id="new-challenge" placeholder="Escribe una nueva prueba..."></textarea>
+        <select id="timer-duration">
+          <option value="0">Sin temporizador</option>
+          <option value="60">1 minuto</option>
+          <option value="120">2 minutos</option>
+        </select>
+        <button onclick="addChallenge()">Añadir prueba</button>
+        <button onclick="saveChallenges()">Guardar y Volver</button>
+      </div>
     </div>
   </div>
 
