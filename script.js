@@ -1,66 +1,71 @@
 
-let players = [];
-let currentPlayerIndex = 0;
-let level = 1;
-let mode = 'lento';
-let pruebasPorNivel = 10;
-let completedChallenges = 0;
-let usedChallenges = {};
+let nivel = 1;
+let turno = 0;
+let jugadores = [];
+let modo = "lento";
+let pruebasPorNivel = {
+    1: ["Caricias suaves", "Miradas profundas", "Besos lentos"],
+    2: ["Exploración con pluma", "Masaje sensual", "Juego con vendas"],
+    3: ["Desnudez parcial", "Lenguaje corporal intenso", "Juego con temperatura"],
+    4: ["Dominación leve", "Uso de juguetes suaves", "Exploración creativa"],
+    5: ["Toque final del castillo", "Reto extremo", "Desafío libre"]
+};
+
+let historialPruebas = {
+    1: [], 2: [], 3: [], 4: [], 5: []
+};
 
 function startGame() {
-    const p1Name = document.getElementById("player1Name").value || "Jugador 1";
-    const p1Gender = document.getElementById("player1Gender").value;
-    const p2Name = document.getElementById("player2Name").value || "Jugador 2";
-    const p2Gender = document.getElementById("player2Gender").value;
-    mode = document.querySelector('input[name="mode"]:checked').value;
-    pruebasPorNivel = mode === "lento" ? 10 : 5;
+    const name1 = document.getElementById('player1Name').value || "Jugador 1";
+    const gender1 = document.getElementById('player1Gender').value;
+    const name2 = document.getElementById('player2Name').value || "Jugador 2";
+    const gender2 = document.getElementById('player2Gender').value;
+    const radios = document.getElementsByName('mode');
 
-    players = [
-        { name: p1Name, gender: p1Gender },
-        { name: p2Name, gender: p2Gender }
+    for (const r of radios) {
+        if (r.checked) {
+            modo = r.value;
+            break;
+        }
+    }
+
+    jugadores = [
+        { nombre: name1, genero: gender1 },
+        { nombre: name2, genero: gender2 }
     ];
+    nivel = 1;
+    turno = 0;
+    historialPruebas = { 1: [], 2: [], 3: [], 4: [], 5: [] };
 
-    usedChallenges = {};
-    level = 1;
-    completedChallenges = 0;
-    currentPlayerIndex = 0;
-
-    document.getElementById("menu").classList.add("hidden");
-    document.getElementById("game").classList.remove("hidden");
-
+    document.getElementById('gameArea').style.display = 'block';
     nextChallenge();
 }
 
 function nextChallenge() {
-    const currentPlayer = players[currentPlayerIndex];
-    const playerDisplay = `Turno de ${currentPlayer.name}`;
-    document.getElementById("turnInfo").innerText = "Turno de...";
-    document.getElementById("levelInfo").innerText = `Nivel ${level}`;
-    document.getElementById("playerTurn").innerText = playerDisplay;
+    const jugador = jugadores[turno % jugadores.length];
+    const pruebasNivel = pruebasPorNivel[nivel];
+    const historial = historialPruebas[nivel];
 
-    const nivelPruebas = pruebas[`nivel${level}`] || [];
-    usedChallenges[`nivel${level}`] = usedChallenges[`nivel${level}`] || [];
-
-    const remaining = nivelPruebas.filter(p => !usedChallenges[`nivel${level}`].includes(p));
-    if (remaining.length === 0) {
-        usedChallenges[`nivel${level}`] = [];
+    let prueba;
+    const opcionesDisponibles = pruebasNivel.filter(p => !historial.includes(p));
+    if (opcionesDisponibles.length > 0) {
+        prueba = opcionesDisponibles[Math.floor(Math.random() * opcionesDisponibles.length)];
+        historial.push(prueba);
+    } else {
+        prueba = pruebasNivel[Math.floor(Math.random() * pruebasNivel.length)];
     }
 
-    const challengePool = nivelPruebas.filter(p => !usedChallenges[`nivel${level}`].includes(p));
-    const challenge = challengePool[Math.floor(Math.random() * challengePool.length)];
+    document.getElementById('turnoText').innerText = `Turno de ${jugador.nombre}`;
+    document.getElementById('nivelText').innerText = `Nivel ${nivel}`;
+    document.getElementById('pruebaText').innerText = prueba;
 
-    document.getElementById("challengeText").innerText = challenge;
-    usedChallenges[`nivel${level}`].push(challenge);
-
-    completedChallenges++;
-    if (completedChallenges >= pruebasPorNivel) {
-        level++;
-        completedChallenges = 0;
+    turno++;
+    const pruebasParaSubir = modo === 'lento' ? 10 : 5;
+    if (historial.length >= pruebasParaSubir && nivel < 5) {
+        nivel++;
     }
-
-    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
 }
 
 function resetGame() {
-    window.location.reload();
+    location.reload();
 }
