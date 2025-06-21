@@ -1,43 +1,75 @@
 
+/* Estilos generales */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    color: white;
-    background-image: url('background.jpg');
-    background-size: cover;
-    background-position: top center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  color: white;
+  background-image: url('background.jpg'); /* Cambia esto si el nombre del fondo es diferente */
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  min-height: 100vh;
 }
 
-.overlay {
-    background: rgba(0, 0, 0, 0.6);
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    width: 90%;
-    max-width: 400px;
+/* Contenedor principal */
+main, .container, .game-area {
+  padding-top: 280px; /* Ajusta según el tamaño del logo en el background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-.inputs input, .inputs select {
-    margin: 5px;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    width: 90%;
+/* Encabezados */
+h1, h2, h3 {
+  color: white;
 }
 
+/* Formulario */
+form {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+/* Inputs */
+input[type="text"], select {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+}
+
+/* Botones */
 button {
-    padding: 10px 20px;
-    margin: 10px 5px;
-    border: none;
-    border-radius: 10px;
-    background-color: #ff4dd2;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  background-color: #ff3399;
+  color: white;
+  font-size: 16px;
+  margin: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #cc0066;
+}
+
+/* Zona de pruebas */
+#test-area {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 90%;
+  margin-top: 20px;
+}
+
+/* Etiquetas de turno y nivel */
+.turn-info {
+  font-size: 20px;
+  margin-bottom: 10px;
 }
