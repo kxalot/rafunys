@@ -1,7 +1,7 @@
 body {
   margin: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #8b0000;
+  font-family: sans-serif;
+  background-color: red;
   color: white;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@ body {
   background-size: 60%;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.07;
+  opacity: 0.1;
   position: fixed;
   top: 0;
   left: 0;
@@ -32,60 +32,46 @@ header {
 }
 
 .main-logo {
-  height: 60px;
-  margin-top: 10px;
+  height: 160px;
 }
 
 .game-container {
   padding: 20px;
-  max-width: 90%;
+  max-width: 600px;
   text-align: center;
   z-index: 2;
 }
 
 .level-display, .turn-display {
-  font-size: 1.3em;
+  font-size: 1.4em;
   margin: 10px 0;
 }
 
 .test-box {
-  background-color: #111;
+  background-color: black;
   padding: 20px;
   border-radius: 15px;
-  font-size: 1.2em;
+  font-size: 1.3em;
   margin-bottom: 20px;
   min-height: 120px;
 }
 
 button {
-  padding: 12px 24px;
-  background-color: #ff69b4;
-  color: black;
-  font-weight: bold;
+  padding: 10px 20px;
+  background-color: pink;
   border: none;
   border-radius: 10px;
   font-size: 1em;
   cursor: pointer;
   margin: 5px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-
-button:hover {
-  background-color: #ffc0cb;
 }
 
 select, input {
   padding: 10px;
-  margin: 10px 5px;
+  margin: 10px;
   border-radius: 8px;
   border: none;
   font-size: 1em;
-  width: 45%;
-}
-
-input[type=text] {
-  background-color: #222;
-  color: white;
 }
 
 .hidden {
@@ -93,7 +79,6 @@ input[type=text] {
 }
 
 #timer {
-  font-size: 1.3em;
+  font-size: 1.4em;
   margin: 10px 0;
-  color: #ffd700;
 }
