@@ -1,46 +1,48 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Rafunys Hot Castle</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="favicon.ico" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="background-logo"></div>
   <header>
-    <img src="logo.png" alt="Rafunys Hot Castle" class="main-logo"/>
+    <img src="logo.png" alt="Rafunys Logo" class="main-logo">
   </header>
-  <main class="game-container">
-    <section id="setupMenu">
-      <h2>Elige Jugadores</h2>
-      <input type="text" id="player1" placeholder="Nombre jugador/a 1" />
-      <select id="gender1">
-        <option value="@hombre">Hombre</option>
-        <option value="@mujer">Mujer</option>
-      </select>
-      <input type="text" id="player2" placeholder="Nombre jugador/a 2" />
-      <select id="gender2">
-        <option value="@hombre">Hombre</option>
-        <option value="@mujer">Mujer</option>
-      </select>
-      <button onclick="startGame()">Entrar al Castillo 🔥</button>
-    </section>
 
-    <section id="turnNotice" class="hidden">
-      <h2 id="turnText">Turno de...</h2>
-    </section>
+  <div id="setupMenu" class="game-container">
+    <h2>🔥 Bienvenidos al Castillo 🔥</h2>
+    <input id="player1" placeholder="Nombre jugador 1">
+    <select id="gender1">
+      <option value="@hombre">Hombre</option>
+      <option value="@mujer">Mujer</option>
+    </select>
+    <br>
+    <input id="player2" placeholder="Nombre jugador 2">
+    <select id="gender2">
+      <option value="@hombre">Hombre</option>
+      <option value="@mujer">Mujer</option>
+    </select>
+    <br><br>
+    <p><strong>Modo de juego:</strong></p>
+    <label><input type="radio" name="mode" value="lento" checked> 🐢 Lento (10 pruebas por nivel)</label><br>
+    <label><input type="radio" name="mode" value="rapido"> ⚡ Rápido (5 pruebas por nivel)</label><br><br>
+    <button onclick="startGame()">Entrar al Castillo 🔥</button>
+  </div>
 
-    <section id="gameScreen" class="hidden">
-      <div class="level-display">Nivel <span id="level">1</span></div>
-      <div class="turn-display">Turno de: <span id="currentPlayerName"></span></div>
-      <div class="test-box" id="testBox">Pulsa para comenzar...</div>
-      <div id="timer" class="hidden"></div>
-      <button onclick="nextTest()">Siguiente Prueba</button>
-      <button onclick="resetGame()">Reiniciar Castillo</button>
-    </section>
-  </main>
+  <div id="turnNotice" class="game-container hidden">
+    <h2 id="turnText">Turno de...</h2>
+  </div>
+
+  <div id="gameScreen" class="game-container hidden">
+    <div class="level-display">Nivel <span id="level">1</span></div>
+    <div class="turn-display">Turno de <span id="currentPlayerName">Jugador</span></div>
+    <div id="testBox" class="test-box">Pulsa para comenzar...</div>
+    <div id="timer" class="hidden"></div>
+    <button onclick="nextTest()">Siguiente prueba</button>
+    <button onclick="resetGame()">Reiniciar Castillo 🏰</button>
+  </div>
 
   <script src="script.js"></script>
 </body>
