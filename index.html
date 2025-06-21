@@ -1,42 +1,45 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rafuny's Hot Castle</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="overlay">
-        <h1>🔥 Bienvenidos al Castillo 🔥</h1>
-        <div class="inputs">
-            <input type="text" id="player1" placeholder="Nombre jugador 1" />
-            <select id="gender1">
-                <option value="hombre">Hombre</option>
-                <option value="mujer">Mujer</option>
+    <div class="container">
+        <div class="menu" id="menu">
+            <h1>🔥 Bienvenidos al Castillo 🔥</h1>
+            <input type="text" id="player1Name" placeholder="Nombre jugador 1">
+            <select id="player1Gender">
+                <option value="Hombre">Hombre</option>
+                <option value="Mujer">Mujer</option>
             </select>
-            <input type="text" id="player2" placeholder="Nombre jugador 2" />
-            <select id="gender2">
-                <option value="hombre">Hombre</option>
-                <option value="mujer">Mujer</option>
+            <input type="text" id="player2Name" placeholder="Nombre jugador 2">
+            <select id="player2Gender">
+                <option value="Hombre">Hombre</option>
+                <option value="Mujer">Mujer</option>
             </select>
+            <div class="mode">
+                <p>Modo de juego:</p>
+                <label><input type="radio" name="mode" value="lento" checked> 🐢 Lento (10 pruebas por nivel)</label>
+                <label><input type="radio" name="mode" value="rapido"> ⚡ Rápido (5 pruebas por nivel)</label>
+            </div>
+            <button onclick="startGame()">Entrar al Castillo 🔥</button>
         </div>
-        <div class="mode">
-            <p>Modo de juego:</p>
-            <label><input type="radio" name="mode" value="lento" checked /> 🐢 Lento (10 pruebas por nivel)</label>
-            <label><input type="radio" name="mode" value="rapido" /> ⚡ Rápido (5 pruebas por nivel)</label>
-        </div>
-        <button onclick="startGame()">Entrar al Castillo 🔥</button>
-        <div id="game" style="display:none;">
-            <h2 id="turnDisplay">Turno de...</h2>
-            <p id="levelDisplay">Nivel 1</p>
-            <p id="playerTurnDisplay"></p>
-            <p id="challengeDisplay">Pulsa para comenzar...</p>
-            <button onclick="nextChallenge()">Siguiente prueba</button>
-            <button onclick="resetGame()">Reiniciar Castillo 🏰</button>
+
+        <div class="game hidden" id="game">
+            <h2 id="turnInfo">Turno de...</h2>
+            <p id="levelInfo"></p>
+            <p id="playerTurn"></p>
+            <p id="challengeText"></p>
+            <div class="controls">
+                <button onclick="nextChallenge()">Siguiente prueba</button>
+                <button onclick="resetGame()">Reiniciar Castillo 🏰</button>
+            </div>
         </div>
     </div>
+    <script src="pruebas.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

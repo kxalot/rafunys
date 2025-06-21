@@ -1,62 +1,66 @@
 
-const pruebasPorNivel = {
-    1: ["Caricia suave", "Mirada intensa", "Susurros al oído", "Besos en el cuello"],
-    2: ["Exploración con pluma", "Masaje con aceite", "Juego de hielos", "Ataduras suaves"],
-    3: ["Uso del vibrador", "Palo inmovilizador", "Fusta en acción", "Tentáculo en juego"],
-    4: ["Suspensión ligera", "Cambio de roles", "Ordena y obedece", "Toque final del castillo"]
-};
-
 let players = [];
-let genders = [];
 let currentPlayerIndex = 0;
-let currentLevel = 1;
-let pruebasCompletadas = 0;
-let pruebasPorNivelRequeridas = 10;
-let modo = "lento";
+let level = 1;
+let mode = 'lento';
+let pruebasPorNivel = 10;
+let completedChallenges = 0;
+let usedChallenges = {};
 
 function startGame() {
-    const player1 = document.getElementById("player1").value || "Jugador 1";
-    const player2 = document.getElementById("player2").value || "Jugador 2";
-    const gender1 = document.getElementById("gender1").value;
-    const gender2 = document.getElementById("gender2").value;
-    const selectedMode = document.querySelector('input[name="mode"]:checked').value;
+    const p1Name = document.getElementById("player1Name").value || "Jugador 1";
+    const p1Gender = document.getElementById("player1Gender").value;
+    const p2Name = document.getElementById("player2Name").value || "Jugador 2";
+    const p2Gender = document.getElementById("player2Gender").value;
+    mode = document.querySelector('input[name="mode"]:checked').value;
+    pruebasPorNivel = mode === "lento" ? 10 : 5;
 
-    modo = selectedMode;
-    pruebasPorNivelRequeridas = modo === "rapido" ? 5 : 10;
+    players = [
+        { name: p1Name, gender: p1Gender },
+        { name: p2Name, gender: p2Gender }
+    ];
 
-    players = [player1, player2];
-    genders = [gender1, gender2];
+    usedChallenges = {};
+    level = 1;
+    completedChallenges = 0;
     currentPlayerIndex = 0;
-    currentLevel = 1;
-    pruebasCompletadas = 0;
 
-    document.querySelector(".mode").style.display = "none";
-    document.querySelector(".inputs").style.display = "none";
-    document.querySelector("button").style.display = "none";
-    document.getElementById("game").style.display = "block";
+    document.getElementById("menu").classList.add("hidden");
+    document.getElementById("game").classList.remove("hidden");
 
-    updateDisplay();
-}
-
-function updateDisplay() {
-    document.getElementById("levelDisplay").innerText = `Nivel ${currentLevel}`;
-    document.getElementById("playerTurnDisplay").innerText = `Turno de ${players[currentPlayerIndex]}`;
+    nextChallenge();
 }
 
 function nextChallenge() {
-    const pruebasNivel = pruebasPorNivel[currentLevel];
-    const prueba = pruebasNivel[Math.floor(Math.random() * pruebasNivel.length)];
-    document.getElementById("challengeDisplay").innerText = prueba;
+    const currentPlayer = players[currentPlayerIndex];
+    const playerDisplay = `Turno de ${currentPlayer.name}`;
+    document.getElementById("turnInfo").innerText = "Turno de...";
+    document.getElementById("levelInfo").innerText = `Nivel ${level}`;
+    document.getElementById("playerTurn").innerText = playerDisplay;
 
-    pruebasCompletadas++;
-    if (pruebasCompletadas >= pruebasPorNivelRequeridas) {
-        currentLevel++;
-        pruebasCompletadas = 0;
+    const nivelPruebas = pruebas[`nivel${level}`] || [];
+    usedChallenges[`nivel${level}`] = usedChallenges[`nivel${level}`] || [];
+
+    const remaining = nivelPruebas.filter(p => !usedChallenges[`nivel${level}`].includes(p));
+    if (remaining.length === 0) {
+        usedChallenges[`nivel${level}`] = [];
     }
+
+    const challengePool = nivelPruebas.filter(p => !usedChallenges[`nivel${level}`].includes(p));
+    const challenge = challengePool[Math.floor(Math.random() * challengePool.length)];
+
+    document.getElementById("challengeText").innerText = challenge;
+    usedChallenges[`nivel${level}`].push(challenge);
+
+    completedChallenges++;
+    if (completedChallenges >= pruebasPorNivel) {
+        level++;
+        completedChallenges = 0;
+    }
+
     currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-    updateDisplay();
 }
 
 function resetGame() {
-    location.reload();
+    window.location.reload();
 }
