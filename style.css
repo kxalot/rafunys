@@ -1,26 +1,43 @@
 
 body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: url('assets/backgr2.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: white;
-  text-align: center;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: top center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.logo {
-  width: 70%;
-  max-width: 500px;
-  margin-top: 10px;
+
+.overlay {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
 }
-.menu, #game {
-  background-color: rgba(0, 0, 0, 0.7);
-  display: inline-block;
-  padding: 20px;
-  border-radius: 15px;
-  margin-top: 20px;
+
+.inputs input, .inputs select {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    width: 90%;
 }
-input, select, button {
-  margin: 5px;
-  padding: 10px;
-  font-size: 1em;
+
+button {
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 10px;
+    background-color: #ff4dd2;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
 }
